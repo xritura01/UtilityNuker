@@ -1,9 +1,4 @@
-# yo if you are checking the code then its fine 
-# but if you are a skid hear me out i have tried to make it as simple as possible for you 
-# but dont mess with async and threads unless you want discord to fuck your bot token in ass
-# if you are using an snippet from this source kindly give credit to us  
-# if you need help in copying a snippet or something you can feel free to open a ticket 
-# - by resil1x
+
 
 import discord
 import asyncio
@@ -804,3 +799,4 @@ async def main(self, guild):
 if __name__ == "__main__":
     bot = CrimsonBot()
     asyncio.run(bot.run())
+
